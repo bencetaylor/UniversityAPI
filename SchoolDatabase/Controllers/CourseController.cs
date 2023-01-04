@@ -1,6 +1,10 @@
-﻿namespace SchoolDatabase.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace SchoolDatabase.Controllers
 {
-    public class CourseController
+    [ApiController]
+    [Route("api/[controller]/[action]")]
+    public class CourseController : Controller
     {
     }
 }
