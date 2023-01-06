@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<ITeacherService, TeacherService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ISemesterService, SemesterService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 
 #region Db
 

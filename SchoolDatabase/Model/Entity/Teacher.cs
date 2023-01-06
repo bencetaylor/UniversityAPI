@@ -17,12 +17,12 @@ namespace SchoolDatabase.Model.Entity
         public string Email { get; set; }
 
         [Required]
-        public int PostitionId { get; set; }
+        public int PositionId { get; set; }
 
         [ForeignKey("PositionId")]
-        public Position Position { get; set; }
+        public Position? Position { get; set; }
 
-        public virtual ICollection<Course> Courses { get; set; }
+        public virtual ICollection<Course>? Courses { get; set; }
     }
 
     public class TeacherEntityTypeConfiguration : IEntityTypeConfiguration<Teacher>

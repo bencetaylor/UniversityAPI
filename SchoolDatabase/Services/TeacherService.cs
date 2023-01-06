@@ -1,15 +1,16 @@
-﻿using SchoolDatabase.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolDatabase.Context;
 using SchoolDatabase.Model.Entity;
 
 namespace SchoolDatabase.Services
 {
     public class TeacherService : ITeacherService
     {
-        private readonly SchoolAPIDbContext _schoolAPIDbContext;
+        private readonly SchoolAPIDbContext _context;
 
-        public TeacherService(SchoolAPIDbContext schoolAPIDbContext)
+        public TeacherService(SchoolAPIDbContext context)
         {
-            _schoolAPIDbContext = schoolAPIDbContext;
+            _context = context;
         }
 
         /// <summary>
@@ -17,12 +18,66 @@ namespace SchoolDatabase.Services
         /// </summary>
         public IQueryable<Teacher> GetAll()
         {
-            return _schoolAPIDbContext.Set<Teacher>();
+            return _context.Set<Teacher>();
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IQueryable<Teacher> GetTeacherById(int id)
+        {
+            return _context.Set<Teacher>()
+                .Where(e => e.Id == id)
+                .Include(e => e.Position)
+                .Include(e => e.Courses)
+                .AsQueryable();
         }
 
-        public IQueryable<Subject> GetSubjectsByTeacherAndSemester(int TeacherId, int SemesterId)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="teacher"></param>
+        /// <returns></returns>
+        public async Task UpdateTeacher(Teacher teacher)
         {
-            throw new NotImplementedException();
+            _context.Set<Teacher>().Update(teacher);
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="teacher"></param>
+        /// <returns></returns>
+        public async Task CreateTeacher(Teacher teacher)
+        {
+            await _context.AddAsync(teacher);
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task DeleteTeacher(int id)
+        {
+            var teacher = _context.Set<Teacher>().FirstOrDefault(e => e.Id == id);
+            if(teacher != null)
+            {
+                teacher.Deleted = true;
+                _context.Set<Teacher>().Update(teacher);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public IQueryable<Course> GetAllByTeacherAndSemester(int id, int semesterId)
+        {
+            var teacher = _context.Set<Teacher>().FirstOrDefault(t => t.Id == id);
+            if (teacher == null) return null;
+            return teacher.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
         }
     }
 }

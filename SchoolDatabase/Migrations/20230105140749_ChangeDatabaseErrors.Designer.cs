@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolDatabase.Context;
 
@@ -11,9 +12,10 @@ using SchoolDatabase.Context;
 namespace SchoolDatabase.Migrations
 {
     [DbContext(typeof(SchoolAPIDbContext))]
-    partial class SchoolAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230105140749_ChangeDatabaseErrors")]
+    partial class ChangeDatabaseErrors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +36,7 @@ namespace SchoolDatabase.Migrations
 
                     b.HasIndex("StudentsId");
 
-                    b.ToTable("CourseStudent (Dictionary<string, object>)", (string)null);
+                    b.ToTable("CourseStudent (Dictionary<string, object>)");
                 });
 
             modelBuilder.Entity("CourseTeacher", b =>
@@ -49,7 +51,7 @@ namespace SchoolDatabase.Migrations
 
                     b.HasIndex("TeachersId");
 
-                    b.ToTable("CourseTeacher (Dictionary<string, object>)", (string)null);
+                    b.ToTable("CourseTeacher (Dictionary<string, object>)");
                 });
 
             modelBuilder.Entity("SchoolDatabase.Model.Entity.Course", b =>
@@ -75,7 +77,7 @@ namespace SchoolDatabase.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("Course", (string)null);
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("SchoolDatabase.Model.Entity.Department", b =>
@@ -93,7 +95,7 @@ namespace SchoolDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Department", (string)null);
+                    b.ToTable("Department");
                 });
 
             modelBuilder.Entity("SchoolDatabase.Model.Entity.Position", b =>
@@ -111,7 +113,7 @@ namespace SchoolDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Position", (string)null);
+                    b.ToTable("Position");
                 });
 
             modelBuilder.Entity("SchoolDatabase.Model.Entity.Semester", b =>
@@ -138,7 +140,7 @@ namespace SchoolDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Semester", (string)null);
+                    b.ToTable("Semester");
                 });
 
             modelBuilder.Entity("SchoolDatabase.Model.Entity.Speciality", b =>
@@ -156,7 +158,7 @@ namespace SchoolDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Speciality", (string)null);
+                    b.ToTable("Speciality");
                 });
 
             modelBuilder.Entity("SchoolDatabase.Model.Entity.Student", b =>
@@ -192,7 +194,7 @@ namespace SchoolDatabase.Migrations
 
                     b.HasIndex("SpecialityId");
 
-                    b.ToTable("Student", (string)null);
+                    b.ToTable("Student");
                 });
 
             modelBuilder.Entity("SchoolDatabase.Model.Entity.Subject", b =>
@@ -226,7 +228,7 @@ namespace SchoolDatabase.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Subject", (string)null);
+                    b.ToTable("Subject");
                 });
 
             modelBuilder.Entity("SchoolDatabase.Model.Entity.Teacher", b =>
@@ -262,7 +264,7 @@ namespace SchoolDatabase.Migrations
 
                     b.HasIndex("PositionId");
 
-                    b.ToTable("Teacher", (string)null);
+                    b.ToTable("Teacher");
                 });
 
             modelBuilder.Entity("CourseStudent", b =>

@@ -5,6 +5,10 @@ namespace SchoolDatabase.Services
     public interface ITeacherService
     {
         public IQueryable<Teacher> GetAll();
-        public IQueryable<Subject> GetSubjectsByTeacherAndSemester(int TeacherId, int SemesterId);
+        public IQueryable<Teacher> GetTeacherById(int id);
+        public Task CreateTeacher(Teacher teacher);
+        public Task UpdateTeacher(Teacher teacher);
+        public Task DeleteTeacher(int id);
+        public IQueryable<Course> GetAllByTeacherAndSemester(int id, int semesterId);
     }
 }

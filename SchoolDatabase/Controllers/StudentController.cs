@@ -20,5 +20,30 @@ namespace SchoolDatabase.Controllers
         {
             return _studentService.GetStudents();
         }
+
+        [HttpGet]
+        [Route("{id}")]
+        public IQueryable<Student> get(int id)
+        {
+            return _studentService.GetStudent(id);
+        }
+
+        [HttpPut]
+        public async Task update(Student Student)
+        {
+            await _studentService.UpdateStudent(Student);
+        }
+
+        [HttpPost]
+        public async Task create(Student Student)
+        {
+            await _studentService.CreateStudent(Student);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task delete(int id)
+        {
+            await _studentService.DeleteStudentById(id);
+        }
     }
 }

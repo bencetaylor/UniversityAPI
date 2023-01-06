@@ -9,10 +9,13 @@ namespace SchoolDatabase.Controllers
     public class TeacherController : Controller
     {
         private readonly ITeacherService _teacherService;
+        //private readonly ICourseService _courseService;
 
-        public TeacherController(ITeacherService teacherService)
+
+        public TeacherController(ITeacherService teacherService/*, ICourseService courseService*/)
         {
             _teacherService = teacherService;
+            //_courseService = courseService;
         }
 
         [HttpGet]
@@ -21,10 +24,34 @@ namespace SchoolDatabase.Controllers
             return _teacherService.GetAll();
         }
 
-        [HttpGet("{TeacherId}/{SemesterId}")]
-        public IQueryable<Subject> teachers(int TeacherId, int SemesterId)
-        {
-            return _teacherService.GetSubjectsByTeacherAndSemester(TeacherId, SemesterId);
+        [HttpGet("{id}")]
+        public IQueryable<Teacher> get(int id) {
+            return _teacherService.GetTeacherById(id);
         }
+
+        [HttpGet("{id}/courses/{semesterId}")]
+        public IQueryable<Course> get(int id, int semesterId)
+        {
+            return _teacherService.GetAllByTeacherAndSemester(id, semesterId);
+        }
+
+        [HttpPost]
+        public async Task create([FromBody] Teacher teacher)
+        {
+            await _teacherService.CreateTeacher(teacher);
+        }
+
+        [HttpPut]
+        public async Task update(Teacher teacher)
+        {
+            await _teacherService.UpdateTeacher(teacher);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task delete(int id)
+        {
+            await _teacherService.DeleteTeacher(id);
+        }
+
     }
 }
