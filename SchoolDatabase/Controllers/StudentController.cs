@@ -15,10 +15,10 @@ namespace SchoolDatabase.Controllers
             _studentService = studentService;
         }
 
-        [HttpGet]
-        public IQueryable<Student> all()
+        [HttpGet("{containDeleted?}")]
+        public IQueryable<Student> all(bool containDeleted)
         {
-            return _studentService.GetStudents();
+            return _studentService.GetStudents(containDeleted);
         }
 
         [HttpGet]
@@ -26,6 +26,13 @@ namespace SchoolDatabase.Controllers
         public IQueryable<Student> get(int id)
         {
             return _studentService.GetStudent(id);
+        }
+
+        [HttpGet]
+        [Route("{id}/courses/{semesterId}/{containDeleted?}")]
+        public IQueryable<Course> get(int id, int semesterId, bool containDeleted)
+        {
+            return _studentService.GetAllByStudentAndSemester(id, semesterId, containDeleted);
         }
 
         [HttpPut]

@@ -30,9 +30,17 @@ namespace SchoolDatabase.Context
             modelBuilder.RemovePluralizingTableNameConvention();
             modelBuilder.RemoveOneToManyCascadeDeleteConvention();
 
+
+            /// <summary>
+            /// Global query filter for the entities (related to task 7)
+            /// </summary>
+            modelBuilder.Entity<Student>().HasQueryFilter(rs => !rs.Deleted);
+            modelBuilder.Entity<Teacher>().HasQueryFilter(rs => !rs.Deleted);
+            modelBuilder.Entity<Subject>().HasQueryFilter(rs => !rs.Deleted);
+            modelBuilder.Entity<Course>().HasQueryFilter(rs => !rs.Deleted);
+            modelBuilder.Entity<Semester>().HasQueryFilter(rs => !rs.Deleted);
+
             base.OnModelCreating(modelBuilder);
-
-
         }
     }
 

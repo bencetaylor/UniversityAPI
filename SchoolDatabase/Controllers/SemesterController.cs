@@ -15,10 +15,10 @@ namespace SchoolDatabase.Controllers
             _semesterService = semesterService;
         }
 
-        [HttpGet]  
-        public IQueryable<Semester> all()
+        [HttpGet("{containDeleted?}")]
+        public IQueryable<Semester> all(bool containDeleted)
         {
-            return _semesterService.GetSemesters();
+            return _semesterService.GetSemesters(containDeleted);
         }
 
         [HttpGet("{id}")]

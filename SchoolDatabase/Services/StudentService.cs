@@ -17,9 +17,9 @@ namespace SchoolDatabase.Services
         /// List students based on the deleted flag
         /// </summary>
         /// <returns></returns>
-        public IQueryable<Student> GetStudents()
+        public IQueryable<Student> GetStudents(bool containDeleted)
         {
-            return _context.Set<Student>();
+            return containDeleted ? _context.Set<Student>().IgnoreQueryFilters() : _context.Set<Student>();
         }
 
         /// <summary>
@@ -67,6 +67,38 @@ namespace SchoolDatabase.Services
                 student.Deleted = true;
                 _context.Set<Student>().Update(student);
                 await _context.SaveChangesAsync();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="semesterId"></param>
+        /// <param name="containDeleted"></param>
+        /// <returns></returns>
+        IQueryable<Course> IStudentService.GetAllByStudentAndSemester(int id, int semesterId, bool containDeleted)
+        {
+            if(containDeleted)
+            {
+                var student = _context.Set<Student>()
+                .Include(s => s.Courses)
+                .ThenInclude(c => c.Subject)
+                .IgnoreQueryFilters()
+                .FirstOrDefault(t => t.Id == id);
+                if (student == null) return null;
+
+                return student.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
+            } 
+            else
+            {
+                var student = _context.Set<Student>()
+                .Include(s => s.Courses)
+                .ThenInclude(c => c.Subject)
+                .FirstOrDefault(t => t.Id == id);
+                if (student == null) return null;
+
+                return student.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
             }
         }
     }

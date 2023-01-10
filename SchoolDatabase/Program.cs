@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolDatabase.Context;
 using SchoolDatabase.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,9 @@ builder.Services.AddDbContext<SchoolAPIDbContext>(options =>
 });
 
 #endregion
+
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 

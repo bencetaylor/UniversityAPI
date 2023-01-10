@@ -27,9 +27,9 @@ namespace SchoolDatabase.Services
         /// List all courses
         /// </summary>
         /// <returns></returns>
-        public IQueryable<Course> GetCourses()
+        public IQueryable<Course> GetCourses(bool containDeleted)
         {
-            return _context.Set<Course>();
+            return containDeleted ? _context.Set<Course>().IgnoreQueryFilters() : _context.Set<Course>();
         }
 
         /// <summary>

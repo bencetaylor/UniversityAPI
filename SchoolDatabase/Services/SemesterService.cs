@@ -1,4 +1,5 @@
-﻿using SchoolDatabase.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolDatabase.Context;
 using SchoolDatabase.Model.Entity;
 
 namespace SchoolDatabase.Services
@@ -16,9 +17,9 @@ namespace SchoolDatabase.Services
         /// List all semesters
         /// </summary>
         /// <returns></returns>
-        public IQueryable<Semester> GetSemesters()
+        public IQueryable<Semester> GetSemesters(bool containDeleted)
         {
-            return _context.Set<Semester>();
+            return containDeleted ? _context.Set<Semester>().IgnoreQueryFilters() : _context.Set<Semester>();
         }
 
         /// <summary>

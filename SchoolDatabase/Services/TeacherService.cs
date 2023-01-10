@@ -16,9 +16,9 @@ namespace SchoolDatabase.Services
         /// <summary>
         /// Get all teachers using db context
         /// </summary>
-        public IQueryable<Teacher> GetAll()
+        public IQueryable<Teacher> GetAll(bool containDeleted)
         {
-            return _context.Set<Teacher>();
+            return containDeleted ? _context.Set<Teacher>().IgnoreQueryFilters() : _context.Set<Teacher>();
         }
         
         /// <summary>
@@ -31,7 +31,6 @@ namespace SchoolDatabase.Services
             return _context.Set<Teacher>()
                 .Where(e => e.Id == id)
                 .Include(e => e.Position)
-                .Include(e => e.Courses)
                 .AsQueryable();
         }
 
@@ -73,11 +72,34 @@ namespace SchoolDatabase.Services
             }
         }
 
-        public IQueryable<Course> GetAllByTeacherAndSemester(int id, int semesterId)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="semesterId"></param>
+        /// <param name="containDeleted"></param>
+        /// <returns></returns>
+        public IQueryable<Course> GetAllByTeacherAndSemester(int id, int semesterId, bool containDeleted)
         {
-            var teacher = _context.Set<Teacher>().FirstOrDefault(t => t.Id == id);
-            if (teacher == null) return null;
-            return teacher.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
+            if (containDeleted)
+            {
+                var teacher = _context.Set<Teacher>()
+                .Include(t => t.Courses)
+                .ThenInclude(c => c.Subject)
+                .IgnoreQueryFilters()
+                .FirstOrDefault(t => t.Id == id);
+                if (teacher == null) return null;
+                return teacher.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
+            }
+            else
+            {
+                var teacher = _context.Set<Teacher>()
+                .Include(t => t.Courses)
+                .ThenInclude(c => c.Subject)
+                .FirstOrDefault(t => t.Id == id);
+                if (teacher == null) return null;
+                return teacher.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
+            }
         }
     }
 }
