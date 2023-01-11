@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolDatabase.Context;
 
@@ -11,9 +12,10 @@ using SchoolDatabase.Context;
 namespace SchoolDatabase.Migrations
 {
     [DbContext(typeof(SchoolAPIDbContext))]
-    partial class SchoolAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230111080859_AddNewFieldToCourse")]
+    partial class AddNewFieldToCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

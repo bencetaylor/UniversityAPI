@@ -1,4 +1,5 @@
-﻿using SchoolDatabase.Model.Entity;
+﻿using SchoolDatabase.Model.DTO;
+using SchoolDatabase.Model.Entity;
 
 namespace SchoolDatabase.Services
 {
@@ -10,5 +11,6 @@ namespace SchoolDatabase.Services
         public Task UpdateTeacher(Teacher teacher);
         public Task DeleteTeacher(int id);
         public IQueryable<Course> GetAllByTeacherAndSemester(int id, int semesterId, bool containDeleted);
+        public List<StudentDTO> GetAllStudentsByTeacherAndSemester(int id, int semesterId);
     }
 }

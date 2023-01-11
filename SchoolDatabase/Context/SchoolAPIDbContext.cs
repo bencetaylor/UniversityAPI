@@ -40,6 +40,9 @@ namespace SchoolDatabase.Context
             modelBuilder.Entity<Course>().HasQueryFilter(rs => !rs.Deleted);
             modelBuilder.Entity<Semester>().HasQueryFilter(rs => !rs.Deleted);
 
+            /// default value for Course timetable informations
+            modelBuilder.Entity<Course>().Property(s => s.Timetable).HasDefaultValue("Ismeretlen");
+
             base.OnModelCreating(modelBuilder);
         }
     }

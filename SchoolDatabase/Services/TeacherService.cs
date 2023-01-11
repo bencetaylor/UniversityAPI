@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolDatabase.Context;
+using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
 
 namespace SchoolDatabase.Services
@@ -73,7 +74,7 @@ namespace SchoolDatabase.Services
         }
 
         /// <summary>
-        /// 
+        /// Get courses for the teacher in the given semester
         /// </summary>
         /// <param name="id"></param>
         /// <param name="semesterId"></param>
@@ -100,6 +101,46 @@ namespace SchoolDatabase.Services
                 if (teacher == null) return null;
                 return teacher.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
             }
+        }
+
+        /// <summary>
+        /// Get students for teacher for a semester
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="semesterId"></param>
+        /// <returns></returns>
+        public List<StudentDTO> GetAllStudentsByTeacherAndSemester(int id, int semesterId)
+        {
+            var teacher = _context.Set<Teacher>()
+                .Include(t => t.Courses.Where(c => c.SemesterId == semesterId))
+                    .ThenInclude(c => c.Subject)
+                    .IgnoreQueryFilters()
+                .Include(t => t.Courses)
+                    .ThenInclude(c => c.Students)
+                    .IgnoreQueryFilters()
+                .IgnoreQueryFilters()
+                .FirstOrDefault(t => t.Id == id);
+
+            List<StudentDTO> result = new List<StudentDTO>();
+
+            if(teacher != null)
+            {
+                teacher.Courses.ToList().ForEach(course =>
+                {
+                    course.Students.ToList().ForEach(student =>
+                    {
+                        result.Add(new StudentDTO()
+                        {
+                            Id = student.Id,
+                            Name = student.Name,
+                            NeptunId = student.NeptunId,
+                            Subject = course.Subject
+                        });
+                    });
+                });
+            }
+
+            return result.OrderBy(s => s.Subject.Code).ThenBy(s => s.Name).ToList();
         }
     }
 }

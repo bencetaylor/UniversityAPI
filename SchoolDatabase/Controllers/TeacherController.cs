@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
 using SchoolDatabase.Services;
 
@@ -29,12 +30,6 @@ namespace SchoolDatabase.Controllers
             return _teacherService.GetTeacherById(id);
         }
 
-        [HttpGet("{id}/courses/{semesterId}/{containDeleted?}")]
-        public IQueryable<Course> get(int id, int semesterId, bool containDeleted)
-        {
-            return _teacherService.GetAllByTeacherAndSemester(id, semesterId, containDeleted);
-        }
-
         [HttpPost]
         public async Task create([FromBody] Teacher teacher)
         {
@@ -53,5 +48,31 @@ namespace SchoolDatabase.Controllers
             await _teacherService.DeleteTeacher(id);
         }
 
+        /// <summary>
+        /// List all courses the teacher has in the semester
+        /// optional - show deleted
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="semesterId"></param>
+        /// <param name="containDeleted"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/courses/{semesterId}/{containDeleted?}")]
+        public IQueryable<Course> get(int id, int semesterId, bool containDeleted)
+        {
+            return _teacherService.GetAllByTeacherAndSemester(id, semesterId, containDeleted);
+        }
+
+        /// <summary>
+        /// List all students in the selected semester for the teacher
+        /// The elements contains the students' name, neptun id, subject
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="semesterId"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/students/{semesterId}")]
+        public List<StudentDTO> get(int id, int semesterId)
+        {
+            return _teacherService.GetAllStudentsByTeacherAndSemester(id, semesterId);
+        }
     }
 }
