@@ -104,7 +104,7 @@ namespace SchoolDatabase.Services
         }
 
         /// <summary>
-        /// Get students for teacher for a semester
+        /// Task 10 - Get students for teacher for a semester
         /// </summary>
         /// <param name="id"></param>
         /// <param name="semesterId"></param>
@@ -141,6 +141,46 @@ namespace SchoolDatabase.Services
             }
 
             return result.OrderBy(s => s.Subject.Code).ThenBy(s => s.Name).ToList();
+        }
+
+        /// <summary>
+        /// Task 11 - Get teacher aggregated data per semester, teacher name, student count, credit count of courses
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="semesterId"></param>
+        /// <returns></returns>
+        public TeacherAggregateDTO GetTeacherAggregatedBySemester(int id, int semesterId)
+        {
+            var teacher = _context.Set<Teacher>()
+                .Include(t => t.Courses.Where(c => c.SemesterId == semesterId))
+                    .ThenInclude(c => c.Subject)
+                    .IgnoreQueryFilters()
+                .Include(t => t.Courses)
+                    .ThenInclude(c => c.Students)
+                    .IgnoreQueryFilters()
+                .IgnoreQueryFilters()
+                .FirstOrDefault(t => t.Id == id);
+
+            var creditCounter = 0;
+            teacher.Courses.ToList().ForEach(course =>
+            {
+                creditCounter += course.Subject.Credit;
+            });
+
+            var studentList = new List<Student>();
+            teacher.Courses.ToList().ForEach(course =>
+            {
+                studentList.AddRange(course.Students);
+            });
+
+            TeacherAggregateDTO dto = new TeacherAggregateDTO()
+            {
+                Name = teacher.Name,
+                CreditCount = creditCounter,
+                StudentCount = studentList.Distinct().Count()
+            };
+
+            return dto;
         }
     }
 }

@@ -74,5 +74,11 @@ namespace SchoolDatabase.Controllers
         {
             return _teacherService.GetAllStudentsByTeacherAndSemester(id, semesterId);
         }
+
+        [HttpGet("{id}/{semesterId}")]
+        public TeacherAggregateDTO aggregate(int id, int semesterId)
+        {
+            return _teacherService.GetTeacherAggregatedBySemester(id, semesterId);
+        }
     }
 }

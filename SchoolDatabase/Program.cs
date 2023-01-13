@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolDatabase.Context;
 using SchoolDatabase.Services;
+using SchoolDatabase.UnitOfWork;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ISemesterService, SemesterService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 #region Db
 

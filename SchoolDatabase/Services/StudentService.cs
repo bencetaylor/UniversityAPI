@@ -1,16 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolDatabase.Context;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.UnitOfWork;
 
 namespace SchoolDatabase.Services
 {
     public class StudentService : IStudentService
     {
-        private readonly SchoolAPIDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IStudentUnitOfWork _studentUnitOfWork;
 
-        public StudentService(SchoolAPIDbContext context)
+        public StudentService(IUnitOfWork unitOfWork, IStudentUnitOfWork studentUnitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
+            _studentUnitOfWork = studentUnitOfWork;
         }
 
         /// <summary>
@@ -19,7 +22,7 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public IQueryable<Student> GetStudents(bool containDeleted)
         {
-            return containDeleted ? _context.Set<Student>().IgnoreQueryFilters() : _context.Set<Student>();
+            return GetBasedOnContainDeleted(containDeleted);
         }
 
         /// <summary>
@@ -77,29 +80,9 @@ namespace SchoolDatabase.Services
         /// <param name="semesterId"></param>
         /// <param name="containDeleted"></param>
         /// <returns></returns>
-        IQueryable<Course> IStudentService.GetAllByStudentAndSemester(int id, int semesterId, bool containDeleted)
+        public IQueryable<Course> GetAllByStudentAndSemester(int id, int semesterId, bool containDeleted)
         {
-            if(containDeleted)
-            {
-                var student = _context.Set<Student>()
-                .Include(s => s.Courses)
-                .ThenInclude(c => c.Subject)
-                .IgnoreQueryFilters()
-                .FirstOrDefault(t => t.Id == id);
-                if (student == null) return null;
-
-                return student.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
-            } 
-            else
-            {
-                var student = _context.Set<Student>()
-                .Include(s => s.Courses)
-                .ThenInclude(c => c.Subject)
-                .FirstOrDefault(t => t.Id == id);
-                if (student == null) return null;
-
-                return student.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
-            }
+            return GetAllByStudentAndSemester(id, semesterId, containDeleted);
         }
     }
 }
