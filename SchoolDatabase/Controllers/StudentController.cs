@@ -23,7 +23,7 @@ namespace SchoolDatabase.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public IQueryable<Student> get(int id)
+        public Student get(int id)
         {
             return _studentService.GetStudent(id);
         }

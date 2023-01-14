@@ -16,34 +16,37 @@ namespace SchoolDatabase.Repository
             DbSet = _context.Set<TEntity>();
         }
 
-        public Task Create(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteSoft(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public IQueryable<TEntity> GetAll()
         {
-            throw new NotImplementedException();
+            return DbSet;
         }
 
-        public Task<TEntity> GetById(int id)
+        public async Task<TEntity> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await DbSet.FirstOrDefaultAsync(e => e.Id == id);
+        }
+
+        public async Task Create(TEntity entity)
+        {
+            await DbSet.AddAsync(entity);
         }
 
         public void Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            DbSet.Update(entity);
+        }
+
+        public async Task Delete(int id)
+        {
+            var entity = await GetById(id);
+            DbSet.Remove(entity);
+        }
+
+        public async Task DeleteSoft(int id)
+        {
+            var entity = await GetById(id);
+            entity.Deleted = true;
+            Update(entity);
         }
     }
 }

@@ -22,9 +22,9 @@ namespace SchoolDatabase.Controllers
         }
 
         [HttpGet("{id}")]
-        public IQueryable<Semester> get(int id)
+        public Semester get(int id)
         {
-            return _semesterService.GetSemesterById(id);
+            return _semesterService.GetSemester(id);
         }
 
         [HttpPost]

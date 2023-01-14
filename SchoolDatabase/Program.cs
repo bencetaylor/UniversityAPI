@@ -13,6 +13,9 @@ builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ISemesterService, SemesterService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
+
+builder.Services.AddScoped<ITeacherUnitOfWork, TeacherUnitOfWork>();
+builder.Services.AddScoped<IStudentUnitOfWork, StudentUnitOfWork>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 #region Db

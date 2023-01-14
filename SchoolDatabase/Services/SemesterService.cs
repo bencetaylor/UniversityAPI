@@ -1,16 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolDatabase.Context;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.UnitOfWork;
 
 namespace SchoolDatabase.Services
 {
     public class SemesterService : ISemesterService
     {
-        private readonly SchoolAPIDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public SemesterService(SchoolAPIDbContext context)
+        public SemesterService(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -19,7 +20,8 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public IQueryable<Semester> GetSemesters(bool containDeleted)
         {
-            return containDeleted ? _context.Set<Semester>().IgnoreQueryFilters() : _context.Set<Semester>();
+            return containDeleted ? _unitOfWork.GetRepository<Semester>().GetAll().IgnoreQueryFilters()
+                : _unitOfWork.GetRepository<Semester>().GetAll();
         }
 
         /// <summary>
@@ -27,9 +29,9 @@ namespace SchoolDatabase.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IQueryable<Semester> GetSemesterById(int id)
+        public Semester GetSemester(int id)
         {
-            return _context.Set<Semester>().ToList().Where(e => e.Id == id).AsQueryable();
+            return _unitOfWork.GetDbSet<Semester>().FirstOrDefault(e => e.Id == id);
         }
 
         /// <summary>
@@ -39,8 +41,8 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public async Task CreateSemester(Semester semester)
         {
-            await _context.Set<Semester>().AddAsync(semester);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.GetRepository<Semester>().Create(semester);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         /// <summary>
@@ -50,14 +52,8 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public async Task DeleteSemester(int id)
         {
-            var semester = _context.Set<Semester>().FirstOrDefault(e => e.Id == id);
-            if(semester != null)
-            {
-                semester.Deleted = true;
-                _context.Set<Semester>().Update(semester);
-                await _context.SaveChangesAsync();
-            }
-
+            await _unitOfWork.GetRepository<Semester>().DeleteSoft(id);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         /// <summary>
@@ -67,8 +63,8 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public async Task UpdateSemester(Semester semester)
         {
-            _context.Set<Semester>().Update(semester);
-            await _context.SaveChangesAsync();
+            _unitOfWork.GetRepository<Semester>().Update(semester);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

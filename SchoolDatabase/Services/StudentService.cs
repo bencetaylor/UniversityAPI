@@ -22,7 +22,8 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public IQueryable<Student> GetStudents(bool containDeleted)
         {
-            return GetBasedOnContainDeleted(containDeleted);
+            return containDeleted ? _unitOfWork.GetRepository<Student>().GetAll().IgnoreQueryFilters()
+                : _unitOfWork.GetRepository<Student>().GetAll();
         }
 
         /// <summary>
@@ -30,9 +31,10 @@ namespace SchoolDatabase.Services
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public IQueryable<Student> GetStudent(int Id)
+        public Student GetStudent(int id)
         {
-            return _context.Set<Student>().ToList().Where(e => e.Id == Id).AsQueryable();
+            return _unitOfWork.GetDbSet<Student>().FirstOrDefault(e => e.Id == id);
+
         }
 
         /// <summary>
@@ -42,8 +44,8 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public async Task UpdateStudent(Student Student)
         {
-            _context.Set<Student>().Update(Student);
-            await _context.SaveChangesAsync();
+            _unitOfWork.GetRepository<Student>().Update(Student);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         /// <summary>
@@ -53,8 +55,8 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public async Task CreateStudent(Student Student)
         {
-            await _context.Set<Student>().AddAsync(Student);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.GetRepository<Student>().Create(Student);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         /// <summary>
@@ -64,13 +66,8 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public async Task DeleteStudentById(int id)
         {
-            var student = _context.Set<Student>().FirstOrDefault(e => e.Id == id);
-            if (student != null)
-            {
-                student.Deleted = true;
-                _context.Set<Student>().Update(student);
-                await _context.SaveChangesAsync();
-            }
+            await _unitOfWork.GetRepository<Student>().DeleteSoft(id);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         /// <summary>
@@ -82,7 +79,7 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public IQueryable<Course> GetAllByStudentAndSemester(int id, int semesterId, bool containDeleted)
         {
-            return GetAllByStudentAndSemester(id, semesterId, containDeleted);
+            return _studentUnitOfWork.GetAllByStudentAndSemester(id, semesterId, containDeleted);
         }
     }
 }

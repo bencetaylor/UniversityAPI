@@ -5,10 +5,10 @@ namespace SchoolDatabase.Services
     public interface IStudentService
     {
         public IQueryable<Student> GetStudents(bool containDeleted);
-        public IQueryable<Student> GetStudent(int StudentId);
-        Task UpdateStudent(Student Student);
-        Task CreateStudent(Student Student);
-        Task DeleteStudentById(int id);
-        IQueryable<Course> GetAllByStudentAndSemester(int id, int semesterId, bool containDeleted);
+        public Student GetStudent(int StudentId);
+        public Task UpdateStudent(Student Student);
+        public Task CreateStudent(Student Student);
+        public Task DeleteStudentById(int id);
+        public IQueryable<Course> GetAllByStudentAndSemester(int id, int semesterId, bool containDeleted);
     }
 }

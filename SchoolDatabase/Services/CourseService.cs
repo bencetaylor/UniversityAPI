@@ -1,16 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolDatabase.Context;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.UnitOfWork;
 
 namespace SchoolDatabase.Services
 {
     public class CourseService : ICourseService
     {
-        private readonly SchoolAPIDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICourseUnitOfWork _courseUnitOfWork;
 
-        public CourseService(SchoolAPIDbContext context)
+        public CourseService(IUnitOfWork unitOfWork, ICourseUnitOfWork courseUnitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
+            _courseUnitOfWork = courseUnitOfWork;
         }
 
         /// <summary>
@@ -18,9 +21,9 @@ namespace SchoolDatabase.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IQueryable<Course> GetCourse(int id)
+        public Course GetCourse(int id)
         {
-            return _context.Set<Course>().ToList().Where(e => e.Id == id).AsQueryable();
+            return _unitOfWork.GetDbSet<Course>().FirstOrDefault(e => e.Id == id);
         }
 
         /// <summary>
@@ -29,7 +32,8 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public IQueryable<Course> GetCourses(bool containDeleted)
         {
-            return containDeleted ? _context.Set<Course>().IgnoreQueryFilters() : _context.Set<Course>();
+            return containDeleted ? _unitOfWork.GetRepository<Course>().GetAll().IgnoreQueryFilters()
+                 : _unitOfWork.GetRepository<Course>().GetAll();
         }
 
         /// <summary>
@@ -39,8 +43,8 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public async Task CreateCourse(Course course)
         {
-            await _context.Set<Course>().AddAsync(course);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.GetRepository<Course>().Create(course);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         /// <summary>
@@ -50,13 +54,8 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public async Task DeleteCourse(int id)
         {
-            var course = _context.Set<Course>().FirstOrDefault(e => e.Id == id);
-            if(course != null)
-            {
-                course.Deleted = true;
-                _context.Set<Course>().Update(course);
-                await _context.SaveChangesAsync();
-            }
+            await _unitOfWork.GetRepository<Course>().DeleteSoft(id);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         /// <summary>
@@ -66,21 +65,13 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public async Task UpdateCourse(Course course)
         {
-            _context.Set<Course>().Update(course);
-            await _context.SaveChangesAsync();
+            _unitOfWork.GetRepository<Course>().Update(course);
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        //IQueryable<Course> GetAllByTeacherAndSemester(int id, int semesterId)
-        //{
-            
-
-        //    //return _context.Set<Teacher>()
-        //    //    .Where(t => t.Id == id)
-        //    //    .Include(t => t.Courses.Where(c => c.SemesterId == semesterId))
-        //    //    .First()
-        //    //    .Courses.AsQueryable();
-        //}
-
-        
+        public IQueryable<Course> GetCourseFilteredByTime(DateTime from, DateTime to)
+        {
+            return _courseUnitOfWork.GetCourseFilteredByTime(from, to);
+        }
     }
 }

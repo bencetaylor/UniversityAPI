@@ -1,15 +1,10 @@
 ﻿using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
 
-namespace SchoolDatabase.Services
+namespace SchoolDatabase.UnitOfWork
 {
-    public interface ITeacherService
+    public interface ITeacherUnitOfWork
     {
-        public IQueryable<Teacher> GetTeachers(bool containDeleted);
-        public Teacher GetTeacher(int id);
-        public Task CreateTeacher(Teacher teacher);
-        public Task UpdateTeacher(Teacher teacher);
-        public Task DeleteTeacher(int id);
         public IQueryable<Course> GetAllByTeacherAndSemester(int id, int semesterId, bool containDeleted);
         public List<StudentDTO> GetAllStudentsByTeacherAndSemester(int id, int semesterId);
         public TeacherAggregateDTO GetTeacherAggregatedBySemester(int id, int semesterId);
