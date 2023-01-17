@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SchoolDatabase.Context;
+using SchoolDatabase.Model.Entity;
 using SchoolDatabase.Services;
 using SchoolDatabase.UnitOfWork;
 using System.Text.Json.Serialization;
@@ -17,6 +19,13 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<ITeacherUnitOfWork, TeacherUnitOfWork>();
 builder.Services.AddScoped<IStudentUnitOfWork, StudentUnitOfWork>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+})
+                .AddEntityFrameworkStores<SchoolAPIDbContext>()
+                .AddDefaultTokenProviders();
 
 #region Db
 

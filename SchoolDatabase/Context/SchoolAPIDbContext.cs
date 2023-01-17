@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using SchoolDatabase.Model.Entity;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,7 +8,7 @@ using System.Reflection;
 
 namespace SchoolDatabase.Context
 {
-    public class SchoolAPIDbContext : DbContext
+    public class SchoolAPIDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int> // DbContext
     {
 
         //public DbSet<Teacher> Teachers { get; set; }
