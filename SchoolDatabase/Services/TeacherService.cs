@@ -71,14 +71,6 @@ namespace SchoolDatabase.Services
         {
             await _unitOfWork.GetRepository<Teacher>().DeleteSoft(id);
             await _unitOfWork.SaveChangesAsync();
-
-            //var teacher = _context.Set<Teacher>().FirstOrDefault(e => e.Id == id);
-            //if(teacher != null)
-            //{
-            //    teacher.Deleted = true;
-            //    _context.Set<Teacher>().Update(teacher);
-            //    await _context.SaveChangesAsync();
-            //}
         }
 
         /// <summary>

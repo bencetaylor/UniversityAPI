@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SchoolDatabase.Model.Entity;
 using SchoolDatabase.Services;
 
@@ -6,6 +8,7 @@ namespace SchoolDatabase.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class SemesterController : Controller
     {
         private readonly ISemesterService _semesterService;

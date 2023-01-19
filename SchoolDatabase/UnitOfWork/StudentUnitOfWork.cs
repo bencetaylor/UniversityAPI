@@ -32,7 +32,7 @@ namespace SchoolDatabase.UnitOfWork
                 .FirstOrDefault(t => t.Id == id);
             }
 
-            if (student == null) return null;
+            if (student == null) throw new Exception("There is no student for this id " + id + "!"); ;
             return student.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
         }
     }

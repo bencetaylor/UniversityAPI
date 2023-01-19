@@ -1,20 +1,27 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SchoolDatabase.Context;
+using SchoolDatabase.Middleware;
 using SchoolDatabase.Model.Entity;
 using SchoolDatabase.Services;
 using SchoolDatabase.UnitOfWork;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+ConfigurationManager configuration = builder.Configuration;
+
+// Add services to the container
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ISemesterService, SemesterService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<ITeacherUnitOfWork, TeacherUnitOfWork>();
 builder.Services.AddScoped<IStudentUnitOfWork, StudentUnitOfWork>();
@@ -27,6 +34,18 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
 })
                 .AddEntityFrameworkStores<SchoolAPIDbContext>()
                 .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = configuration["JWT:ValidAudience"],
+        ValidIssuer = configuration["JWT:ValidIssuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+    };
+}); ;
 
 #region Db
 
@@ -61,6 +80,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseMiddleware<RequestResponseMiddleware>();
 
 // custom endpoint
 app.MapGet("/hi", () => "Hello!");

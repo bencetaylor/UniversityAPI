@@ -20,7 +20,7 @@ namespace SchoolDatabase.UnitOfWork
                 .ThenInclude(c => c.Subject)
                 .IgnoreQueryFilters()
                 .FirstOrDefault(t => t.Id == id);
-                if (teacher == null) return null;
+                if (teacher == null) throw new Exception("No teacher found for id: " + id + "!");
                 return teacher.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
             }
             else
@@ -29,7 +29,7 @@ namespace SchoolDatabase.UnitOfWork
                 .Include(t => t.Courses)
                 .ThenInclude(c => c.Subject)
                 .FirstOrDefault(t => t.Id == id);
-                if (teacher == null) return null;
+                if (teacher == null) throw new Exception("No teacher found for id: " + id + "!");
                 return teacher.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
             }
         }
@@ -48,8 +48,8 @@ namespace SchoolDatabase.UnitOfWork
 
             List<StudentDTO> result = new List<StudentDTO>();
 
-            if (teacher != null)
-            {
+            if (teacher == null) throw new Exception("No teacher found for id: " + id + "!");
+            else {
                 teacher.Courses.ToList().ForEach(course =>
                 {
                     course.Students.ToList().ForEach(student =>
