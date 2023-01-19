@@ -1,4 +1,5 @@
-﻿using SchoolDatabase.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolDatabase.Context;
 using SchoolDatabase.Model.Entity;
 
 namespace SchoolDatabase.UnitOfWork
@@ -11,7 +12,11 @@ namespace SchoolDatabase.UnitOfWork
 
         public IQueryable<Course> GetCourseFilteredByTime(DateTime from, DateTime to)
         {
-            throw new NotImplementedException();
+            return GetRepository<Course>().GetAll()
+                .Include(c => c.Subject)
+                .Include(c => c.Semester)
+                .Where(c => from < c.Semester.EndDate || to < c.Semester.StartDate)
+                .IgnoreQueryFilters().AsQueryable();
         }
     }
 }

@@ -8,8 +8,5 @@ namespace SchoolDatabase.Model.Entity
         public string Name { get; set; }
         public string NeptunId { get; set; }
         public string Department { get; set; }
-
-        //public bool IsRailwayWorker { get; set; }
-        //public string RailwayCompanyName { get; set; }
     }
 }

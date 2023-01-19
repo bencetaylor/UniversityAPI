@@ -7,7 +7,7 @@ namespace SchoolDatabase.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class AuthenticationController
+    public class AuthenticationController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -27,10 +27,11 @@ namespace SchoolDatabase.Controllers
             var user = new ApplicationUser
             {
                 UserName = userForRegistration.Username,
+                Name = userForRegistration.Name,
                 Email = userForRegistration.Email,
+                NeptunId = userForRegistration.NeptunId,
                 DateOfBirth = userForRegistration.DateOfBirth,
-                //IsRailwayWorker = userForRegistration.IsRailwayWorker,
-                //RailwayCompanyName = userForRegistration.IsRailwayWorker ? userForRegistration.RailwayCompanyName : ""
+                Department = userForRegistration.Department != null ? userForRegistration.Department : "ismeretlen"
             };
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
@@ -42,7 +43,7 @@ namespace SchoolDatabase.Controllers
         public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDTO)
         {
             var result = await _signInManager.PasswordSignInAsync(userLoginDTO.Username, userLoginDTO.Password, false, false);
-            return result.Succeeded ? StatusCodes(200) : throw new ApplicationException("Login failed!");
+            return result.Succeeded ? StatusCode(200) : throw new ApplicationException("Login failed!");
         }
 
         [HttpPost]

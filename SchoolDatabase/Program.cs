@@ -18,6 +18,7 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 
 builder.Services.AddScoped<ITeacherUnitOfWork, TeacherUnitOfWork>();
 builder.Services.AddScoped<IStudentUnitOfWork, StudentUnitOfWork>();
+builder.Services.AddScoped<ICourseUnitOfWork, CourseUnitOfWork>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
