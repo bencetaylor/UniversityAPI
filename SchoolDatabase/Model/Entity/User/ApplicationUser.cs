@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SchoolDatabase.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace SchoolDatabase.Model.Entity.User
@@ -8,7 +9,8 @@ namespace SchoolDatabase.Model.Entity.User
         [Required]
         public string Name { get; set; }
         
-        [Required, MinLength(6), MaxLength(6)]
+        [Required]
+        [NeptunCodeValidationAttribute]
         public string NeptunId { get; set; }
         
         [Required]

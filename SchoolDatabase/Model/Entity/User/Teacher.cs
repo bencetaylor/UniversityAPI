@@ -2,12 +2,14 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SchoolDatabase.Attributes;
 
 namespace SchoolDatabase.Model.Entity
 {
     public class Teacher : AbstractEntity
     {
-        [Required, MinLength(6), MaxLength(6)]
+        [Required]
+        [NeptunCodeValidationAttribute]
         public string NeptunId { get; set; }
 
         [Required, MaxLength(255)]
