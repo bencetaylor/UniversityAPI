@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SchoolDatabase.Context;
 using SchoolDatabase.Model.Entity;
 using SchoolDatabase.UnitOfWork;
@@ -10,7 +11,7 @@ namespace SchoolDatabase.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICourseUnitOfWork _courseUnitOfWork;
 
-        public CourseService(IUnitOfWork unitOfWork, ICourseUnitOfWork courseUnitOfWork)
+        public CourseService(IUnitOfWork unitOfWork, ICourseUnitOfWork courseUnitOfWork, IMemoryCache cache)
         {
             _unitOfWork = unitOfWork;
             _courseUnitOfWork = courseUnitOfWork;
