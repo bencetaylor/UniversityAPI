@@ -2,6 +2,7 @@
 using SchoolDatabase.Context;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Model.Entity.User;
 using SchoolDatabase.UnitOfWork;
 
 namespace SchoolDatabase.Services
@@ -105,6 +106,11 @@ namespace SchoolDatabase.Services
         public TeacherAggregateDTO GetTeacherAggregatedBySemester(int id, int semesterId)
         {
             return _teacherUnitOfWork.GetTeacherAggregatedBySemester(id, semesterId);
+        }
+
+        public async Task AssignToCourse(CourseSubscribeDTO dto)
+        {
+            await _teacherUnitOfWork.AssignToCourse(dto);
         }
     }
 }

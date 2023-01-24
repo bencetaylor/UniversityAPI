@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolDatabase.Context;
+using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Model.Entity.User;
 
 namespace SchoolDatabase.UnitOfWork
 {
@@ -34,6 +36,19 @@ namespace SchoolDatabase.UnitOfWork
 
             if (student == null) throw new Exception("There is no student for this id " + id + "!"); ;
             return student.Courses.Where(c => c.SemesterId == semesterId).AsQueryable();
+        }
+
+        public async Task AssignToCourse(CourseSubscribeDTO dto)
+        {
+            var student = GetDbSet<Student>().FirstOrDefault(e => e.Id == dto.UserId);
+            var course = GetDbSet<Course>()
+                .Include(c => c.Students)
+                .FirstOrDefault(e => e.Id == dto.CourseId);
+            if (student != null && course != null)
+            {
+                course.Students.Add(student);
+                GetDbSet<Course>().Update(course);
+            }
         }
     }
 }

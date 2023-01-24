@@ -20,6 +20,7 @@ namespace SchoolDatabase.Controllers
         }
 
         [HttpGet("{containDeleted?}")]
+        [AllowAnonymous]
         public IQueryable<Course> all(bool containDeleted)
         {
             return _courseService.GetCourses(containDeleted);
@@ -32,18 +33,21 @@ namespace SchoolDatabase.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task create(Course course)
         {
             await _courseService.CreateCourse(course);
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task update(Course course)
         {
             await _courseService.UpdateCourse(course);
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task delete(int id)
         {
             await _courseService.DeleteCourse(id);

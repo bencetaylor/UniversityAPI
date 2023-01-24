@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolDatabase.Context;
+using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Model.Entity.User;
 using SchoolDatabase.UnitOfWork;
 
 namespace SchoolDatabase.Services
@@ -33,7 +35,11 @@ namespace SchoolDatabase.Services
         /// <returns></returns>
         public Student GetStudent(int id)
         {
-            return _unitOfWork.GetDbSet<Student>().FirstOrDefault(e => e.Id == id);
+            return _unitOfWork.GetDbSet<Student>()
+                .Include(s => s.Courses)
+                    .ThenInclude(c => c.Subject)
+                .Include(s => s.Speciality)
+                .FirstOrDefault(e => e.Id == id);
 
         }
 
@@ -80,6 +86,11 @@ namespace SchoolDatabase.Services
         public IQueryable<Course> GetAllByStudentAndSemester(int id, int semesterId, bool containDeleted)
         {
             return _studentUnitOfWork.GetAllByStudentAndSemester(id, semesterId, containDeleted);
+        }
+
+        public async Task AssignToCourse(CourseSubscribeDTO dto)
+        {
+            await _studentUnitOfWork.AssignToCourse(dto);
         }
     }
 }

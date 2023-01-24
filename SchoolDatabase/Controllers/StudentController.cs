@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Model.Entity.User;
 using SchoolDatabase.Services;
 
 namespace SchoolDatabase.Controllers
@@ -39,21 +41,31 @@ namespace SchoolDatabase.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task update(Student Student)
         {
             await _studentService.UpdateStudent(Student);
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task create(Student Student)
         {
             await _studentService.CreateStudent(Student);
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task delete(int id)
         {
             await _studentService.DeleteStudentById(id);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task subscribe(CourseSubscribeDTO dto) 
+        {
+            await _studentService.AssignToCourse(dto);
         }
     }
 }

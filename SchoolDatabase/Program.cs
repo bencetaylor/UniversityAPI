@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SchoolDatabase.Context;
 using SchoolDatabase.Middleware;
-using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Model.Entity.User;
 using SchoolDatabase.Services;
 using SchoolDatabase.UnitOfWork;
 using System.Text;
@@ -81,6 +81,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 app.UseMiddleware<RequestResponseMiddleware>();
+app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 // custom endpoint
 app.MapGet("/hi", () => "Hello!");

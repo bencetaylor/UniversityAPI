@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Model.Entity.User;
 using SchoolDatabase.Services;
 
 namespace SchoolDatabase.Controllers
@@ -31,18 +32,21 @@ namespace SchoolDatabase.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task create(Teacher teacher)
         {
             await _teacherService.CreateTeacher(teacher);
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task update(Teacher teacher)
         {
             await _teacherService.UpdateTeacher(teacher);
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task delete(int id)
         {
             await _teacherService.DeleteTeacher(id);
@@ -79,6 +83,13 @@ namespace SchoolDatabase.Controllers
         public TeacherAggregateDTO aggregate(int id, int semesterId)
         {
             return _teacherService.GetTeacherAggregatedBySemester(id, semesterId);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task subscribe(CourseSubscribeDTO dto)
+        {
+            await _teacherService.AssignToCourse(dto);
         }
     }
 }

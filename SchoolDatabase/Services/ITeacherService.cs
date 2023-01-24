@@ -1,5 +1,6 @@
 ﻿using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Model.Entity.User;
 
 namespace SchoolDatabase.Services
 {
@@ -13,5 +14,6 @@ namespace SchoolDatabase.Services
         public IQueryable<Course> GetAllByTeacherAndSemester(int id, int semesterId, bool containDeleted);
         public List<StudentDTO> GetAllStudentsByTeacherAndSemester(int id, int semesterId);
         public TeacherAggregateDTO GetTeacherAggregatedBySemester(int id, int semesterId);
+        public Task AssignToCourse(CourseSubscribeDTO dto);
     }
 }

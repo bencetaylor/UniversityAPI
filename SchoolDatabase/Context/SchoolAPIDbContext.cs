@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Model.Entity.User;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 

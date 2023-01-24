@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SchoolDatabase.Model.DTO;
-using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Model.Entity.User;
 using System.Security.Claims;
 
 namespace SchoolDatabase.Services
@@ -58,6 +58,5 @@ namespace SchoolDatabase.Services
                 await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, role));
             }
         }
-
     }
 }

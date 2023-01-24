@@ -2,6 +2,7 @@
 using SchoolDatabase.Context;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Model.Entity.User;
 
 namespace SchoolDatabase.UnitOfWork
 {
@@ -100,6 +101,17 @@ namespace SchoolDatabase.UnitOfWork
             };
 
             return dto;
+        }
+
+        public async Task AssignToCourse(CourseSubscribeDTO dto)
+        {
+            var teacher = GetDbSet<Teacher>().FirstOrDefault(e => e.Id == dto.UserId);
+            var course = GetDbSet<Course>().FirstOrDefault(e => e.Id == dto.CourseId);
+            if (teacher != null && course != null)
+            {
+                course.Teachers.Add(teacher);
+                GetRepository<Course>().Update(course);
+            }
         }
     }
 }

@@ -20,9 +20,9 @@ namespace SchoolDatabase.Model.Entity
         public int SpecialityId { get; set; }
 
         [ForeignKey("SpecialityId")]
-        public Speciality Speciality { get; set; }
+        public Speciality? Speciality { get; set; }
 
-        public virtual ICollection<Course> Courses { get; set; }
+        public virtual ICollection<Course>? Courses { get; set; }
     }
 
     public class StudentEntityTypeConfiguration : IEntityTypeConfiguration<Student>
