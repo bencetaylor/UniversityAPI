@@ -7,7 +7,7 @@ namespace SchoolDatabase.Model.Entity
 {
     public class Student : AbstractEntity
     {
-        [Required, MaxLength(255)]
+        [Required, MinLength(6), MaxLength(6)]
         public string NeptunId { get; set; }
 
         [Required, MaxLength(255)]
@@ -16,7 +16,6 @@ namespace SchoolDatabase.Model.Entity
         [Required, MaxLength(255)]
         public string Email { get; set; }
 
-        [Required]
         public int SpecialityId { get; set; }
 
         [ForeignKey("SpecialityId")]
