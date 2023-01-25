@@ -7,7 +7,7 @@ namespace SchoolDatabase.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly SchoolAPIDbContext _context;
+        protected readonly SchoolAPIDbContext _context;
         private Dictionary<Type, object> _repositories;
 
         public UnitOfWork(SchoolAPIDbContext context)

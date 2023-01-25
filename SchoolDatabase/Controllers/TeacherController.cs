@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
-using SchoolDatabase.Model.Entity.User;
-using SchoolDatabase.Services;
+using SchoolDatabase.Services.Interface;
 
 namespace SchoolDatabase.Controllers
 {
@@ -27,8 +26,8 @@ namespace SchoolDatabase.Controllers
         }
 
         [HttpGet("{id}")]
-        public Teacher get(int id) {
-            return _teacherService.GetTeacher(id);
+        public async Task<Teacher> get(int id) {
+            return await _teacherService.GetTeacher(id);
         }
 
         [HttpPost]
@@ -88,6 +87,13 @@ namespace SchoolDatabase.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task subscribe(CourseSubscribeDTO dto)
+        {
+            await _teacherService.AssignToCourse(dto);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task unsubscribe(CourseSubscribeDTO dto)
         {
             await _teacherService.AssignToCourse(dto);
         }

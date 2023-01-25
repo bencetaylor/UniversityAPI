@@ -1,7 +1,7 @@
 ﻿using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
 
-namespace SchoolDatabase.UnitOfWork
+namespace SchoolDatabase.UnitOfWork.Interface
 {
     public interface ITeacherUnitOfWork
     {

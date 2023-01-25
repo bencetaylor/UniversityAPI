@@ -1,4 +1,4 @@
-﻿namespace SchoolDatabase.Services
+﻿namespace SchoolDatabase.Services.Interface
 {
     public interface IUserService
     {

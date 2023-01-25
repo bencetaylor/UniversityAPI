@@ -7,8 +7,11 @@ using SchoolDatabase.Context;
 using SchoolDatabase.Middleware;
 using SchoolDatabase.Model.Entity.User;
 using SchoolDatabase.Options;
-using SchoolDatabase.Services;
+using SchoolDatabase.Services.Interface;
+using SchoolDatabase.Services.Service;
 using SchoolDatabase.UnitOfWork;
+using SchoolDatabase.UnitOfWork.Interface;
+using SchoolDatabase.UnitOfWork.UoW;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -21,6 +24,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ISemesterService, SemesterService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUserService, UserService>();

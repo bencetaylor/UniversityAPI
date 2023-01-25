@@ -1,10 +1,10 @@
 ﻿using SchoolDatabase.Model.Entity;
 
-namespace SchoolDatabase.Services
+namespace SchoolDatabase.Services.Interface
 {
     public interface ICourseService
     {
-        public Course GetCourse(int id);
+        public Task<Course> GetCourse(int id);
         public IQueryable<Course> GetCourses(bool containDeleted);
         public Task CreateCourse(Course course);
         public Task UpdateCourse(Course course);

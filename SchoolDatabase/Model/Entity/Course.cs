@@ -12,18 +12,18 @@ namespace SchoolDatabase.Model.Entity
         public int SubjectId { get; set; }
 
         [ForeignKey("SubjectId")]
-        public Subject Subject { get; set; }
+        public Subject? Subject { get; set; }
 
         [Required]
         public int SemesterId { get; set; }
 
         [ForeignKey("SemesterId")]
-        public Semester Semester { get; set; }
+        public Semester? Semester { get; set; }
 
         [Required, MaxLength(255)]
         public String Timetable { get; set; }
 
-        public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<Student>? Students { get; set; }
 
         public virtual ICollection<Teacher> Teachers { get; set; }
     }

@@ -3,8 +3,9 @@ using SchoolDatabase.Context;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
 using SchoolDatabase.Model.Entity.User;
+using SchoolDatabase.UnitOfWork.Interface;
 
-namespace SchoolDatabase.UnitOfWork
+namespace SchoolDatabase.UnitOfWork.UoW
 {
     public class StudentUnitOfWork : UnitOfWork, IStudentUnitOfWork
     {

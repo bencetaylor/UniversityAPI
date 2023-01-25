@@ -2,12 +2,12 @@
 using SchoolDatabase.Model.Entity;
 using SchoolDatabase.Model.Entity.User;
 
-namespace SchoolDatabase.Services
+namespace SchoolDatabase.Services.Interface
 {
     public interface ITeacherService
     {
         public IQueryable<Teacher> GetTeachers(bool containDeleted);
-        public Teacher GetTeacher(int id);
+        public Task<Teacher> GetTeacher(int id);
         public Task CreateTeacher(Teacher teacher);
         public Task UpdateTeacher(Teacher teacher);
         public Task DeleteTeacher(int id);

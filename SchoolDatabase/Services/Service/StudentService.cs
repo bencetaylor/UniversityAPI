@@ -3,9 +3,11 @@ using SchoolDatabase.Context;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
 using SchoolDatabase.Model.Entity.User;
+using SchoolDatabase.Services.Interface;
 using SchoolDatabase.UnitOfWork;
+using SchoolDatabase.UnitOfWork.Interface;
 
-namespace SchoolDatabase.Services
+namespace SchoolDatabase.Services.Service
 {
     public class StudentService : IStudentService
     {

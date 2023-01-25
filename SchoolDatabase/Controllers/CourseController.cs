@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
-using SchoolDatabase.Services;
+using SchoolDatabase.Services.Interface;
 
 namespace SchoolDatabase.Controllers
 {
@@ -27,9 +27,9 @@ namespace SchoolDatabase.Controllers
         }
 
         [HttpGet("{id}")]
-        public Course get(int id)
+        public async Task<Course> get(int id)
         {
-            return _courseService.GetCourse(id);
+            return await _courseService.GetCourse(id);
         }
 
         [HttpPost]

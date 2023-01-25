@@ -2,7 +2,7 @@
 using SchoolDatabase.Model.Entity;
 using SchoolDatabase.Model.Entity.User;
 
-namespace SchoolDatabase.Services
+namespace SchoolDatabase.Services.Interface
 {
     public interface IStudentService
     {

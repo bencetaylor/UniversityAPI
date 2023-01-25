@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Services;
 using SchoolDatabase.Services.Interface;
 
 namespace SchoolDatabase.Controllers
@@ -9,46 +10,47 @@ namespace SchoolDatabase.Controllers
     [ApiController]
     [Route("api/[controller]/[action]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class SemesterController : Controller
+    public class SubjectController
     {
-        private readonly ISemesterService _semesterService;
+        private readonly ISubjectService _subjectService;
 
-        public SemesterController(ISemesterService semesterService)
+        public SubjectController(ISubjectService subjectService)
         {
-            _semesterService = semesterService;
+            _subjectService = subjectService;
         }
 
         [HttpGet("{containDeleted?}")]
-        public IQueryable<Semester> all(bool containDeleted)
+        public IQueryable<Subject> all(bool containDeleted)
         {
-            return _semesterService.GetSemesters(containDeleted);
+            return _subjectService.GetSubjects(containDeleted);
         }
 
         [HttpGet("{id}")]
-        public async Task<Semester> get(int id)
+        public async Task<Subject> get(int id)
         {
-            return await _semesterService.GetSemester(id);
+            return await _subjectService.GetSubject(id);
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task create(Semester semester)
+        public async Task create(Subject subject)
         {
-            await _semesterService.CreateSemester(semester);
+            await _subjectService.CreateSubject(subject);
         }
 
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        public async Task update(Semester semester)
+        public async Task update(Subject subject)
         {
-            await _semesterService.UpdateSemester(semester);
+            await _subjectService.UpdateSubject(subject);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task delete(int id)
         {
-            await _semesterService.DeleteSemester(id);
+            await _subjectService.DeleteSubject(id);
         }
+
     }
 }

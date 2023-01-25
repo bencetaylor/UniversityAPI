@@ -3,11 +3,13 @@ using SchoolDatabase.Context;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
 using SchoolDatabase.Model.Entity.User;
+using SchoolDatabase.UnitOfWork.Interface;
 
-namespace SchoolDatabase.UnitOfWork
+namespace SchoolDatabase.UnitOfWork.UoW
 {
     public class TeacherUnitOfWork : UnitOfWork, ITeacherUnitOfWork
     {
+
         public TeacherUnitOfWork(SchoolAPIDbContext context) : base(context)
         {
         }
@@ -50,7 +52,8 @@ namespace SchoolDatabase.UnitOfWork
             List<StudentDTO> result = new List<StudentDTO>();
 
             if (teacher == null) throw new Exception("No teacher found for id: " + id + "!");
-            else {
+            else
+            {
                 teacher.Courses.ToList().ForEach(course =>
                 {
                     course.Students.ToList().ForEach(student =>
@@ -105,13 +108,24 @@ namespace SchoolDatabase.UnitOfWork
 
         public async Task AssignToCourse(CourseSubscribeDTO dto)
         {
-            var teacher = GetDbSet<Teacher>().FirstOrDefault(e => e.Id == dto.UserId);
-            var course = GetDbSet<Course>().FirstOrDefault(e => e.Id == dto.CourseId);
-            if (teacher != null && course != null)
-            {
-                course.Teachers.Add(teacher);
-                GetRepository<Course>().Update(course);
-            }
+            var course = GetDbSet<Course>()
+                .Include(c => c.Teachers)
+                .FirstOrDefault(c => c.Id == dto.CourseId);
+
+            var teacher = course.Teachers.SingleOrDefault(t => t.Id == dto.UserId);
+            course.Teachers.Remove(teacher);
+            _context.Set<Course>().Update(course);
+
+            //var teacher = GetDbSet<Teacher>()
+            //    .FirstOrDefault(e => e.Id == dto.UserId);
+            //var course = GetDbSet<Course>()
+            //    .Include(c => c.Teachers)
+            //    .FirstOrDefault(e => e.Id == dto.CourseId);
+            //if (teacher != null && course != null)
+            //{
+            //    course.Teachers.Add(teacher);
+            //    GetDbSet<Course>().Update(course);
+            //}
         }
     }
 }

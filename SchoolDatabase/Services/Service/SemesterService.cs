@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolDatabase.Context;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Services.Interface;
 using SchoolDatabase.UnitOfWork;
 
-namespace SchoolDatabase.Services
+namespace SchoolDatabase.Services.Service
 {
     public class SemesterService : ISemesterService
     {
@@ -29,9 +30,9 @@ namespace SchoolDatabase.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Semester GetSemester(int id)
+        public async Task<Semester> GetSemester(int id)
         {
-            return _unitOfWork.GetDbSet<Semester>().FirstOrDefault(e => e.Id == id);
+            return await _unitOfWork.GetRepository<Semester>().GetById(id);
         }
 
         /// <summary>

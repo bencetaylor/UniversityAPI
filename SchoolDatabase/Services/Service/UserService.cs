@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity.User;
+using SchoolDatabase.Services.Interface;
 using System.Security.Claims;
 
-namespace SchoolDatabase.Services
+namespace SchoolDatabase.Services.Service
 {
     public class UserService : IUserService
     {
@@ -32,7 +33,7 @@ namespace SchoolDatabase.Services
         private async Task CreateRole(string roleName)
         {
             var role = await _roleManager.FindByNameAsync(roleName);
-            if(role == null)
+            if (role == null)
             {
                 await _roleManager.CreateAsync(new IdentityRole<int>(roleName));
             }
@@ -50,7 +51,7 @@ namespace SchoolDatabase.Services
                 DateOfBirth = dateOfBirth,
                 Department = department != null ? department : "ismeretlen"
             };
-           
+
             var entity = await _userManager.CreateAsync(user, password);
             if (entity.Succeeded)
             {

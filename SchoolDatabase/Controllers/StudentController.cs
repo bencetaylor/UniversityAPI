@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
 using SchoolDatabase.Model.Entity.User;
-using SchoolDatabase.Services;
+using SchoolDatabase.Services.Interface;
 
 namespace SchoolDatabase.Controllers
 {

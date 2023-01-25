@@ -2,9 +2,11 @@
 using Microsoft.Extensions.Caching.Memory;
 using SchoolDatabase.Context;
 using SchoolDatabase.Model.Entity;
+using SchoolDatabase.Services.Interface;
 using SchoolDatabase.UnitOfWork;
+using SchoolDatabase.UnitOfWork.Interface;
 
-namespace SchoolDatabase.Services
+namespace SchoolDatabase.Services.Service
 {
     public class CourseService : ICourseService
     {
@@ -22,9 +24,9 @@ namespace SchoolDatabase.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Course GetCourse(int id)
+        public async Task<Course> GetCourse(int id)
         {
-            return _unitOfWork.GetDbSet<Course>().FirstOrDefault(e => e.Id == id);
+            return await _courseUnitOfWork.GetCourseById(id);
         }
 
         /// <summary>

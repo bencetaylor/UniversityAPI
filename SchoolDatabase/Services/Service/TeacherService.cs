@@ -3,9 +3,11 @@ using SchoolDatabase.Context;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity;
 using SchoolDatabase.Model.Entity.User;
+using SchoolDatabase.Services.Interface;
 using SchoolDatabase.UnitOfWork;
+using SchoolDatabase.UnitOfWork.Interface;
 
-namespace SchoolDatabase.Services
+namespace SchoolDatabase.Services.Service
 {
     public class TeacherService : ITeacherService
     {
@@ -18,56 +20,29 @@ namespace SchoolDatabase.Services
             _teacherUnitOfWork = teacherUnitOfWork;
         }
 
-
-
-        /// <summary>
-        /// Get all teachers using db context
-        /// </summary>
         public IQueryable<Teacher> GetTeachers(bool containDeleted)
         {
             return containDeleted ? _unitOfWork.GetRepository<Teacher>().GetAll().IgnoreQueryFilters()
                 : _unitOfWork.GetRepository<Teacher>().GetAll();
         }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public Teacher GetTeacher(int id)
+
+        public async Task<Teacher> GetTeacher(int id)
         {
-            return _unitOfWork.GetDbSet<Teacher>()
-                .Include(e => e.Position)
-                .FirstOrDefault(e => e.Id == id);
+            return await _unitOfWork.GetRepository<Teacher>().GetById(id);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="teacher"></param>
-        /// <returns></returns>
         public async Task UpdateTeacher(Teacher teacher)
         {
             _unitOfWork.GetRepository<Teacher>().Update(teacher);
             await _unitOfWork.SaveChangesAsync();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="teacher"></param>
-        /// <returns></returns>
         public async Task CreateTeacher(Teacher teacher)
         {
             await _unitOfWork.GetRepository<Teacher>().Create(teacher);
             await _unitOfWork.SaveChangesAsync();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public async Task DeleteTeacher(int id)
         {
             await _unitOfWork.GetRepository<Teacher>().DeleteSoft(id);
