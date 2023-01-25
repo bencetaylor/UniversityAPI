@@ -23,11 +23,13 @@ namespace SchoolDatabase.UnitOfWork.UoW
 
         public IQueryable<Course> GetCourseFilteredByTime(DateTime from, DateTime to)
         {
-            return GetRepository<Course>().GetAll()
+            var courses = GetRepository<Course>().GetAll()
                 .Include(c => c.Subject)
                 .Include(c => c.Semester)
-                .Where(c => from < c.Semester.EndDate || to < c.Semester.StartDate)
                 .IgnoreQueryFilters().AsQueryable();
+
+            return courses.Where(c => (c.Semester.StartDate <= from && from <= c.Semester.EndDate) 
+            || (c.Semester.StartDate <= to && to <= c.Semester.EndDate));
         }
     }
 }

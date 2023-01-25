@@ -56,8 +56,8 @@ namespace SchoolDatabase.Controllers
         [HttpGet]
         public IQueryable<Course> filter([FromBody] CourseFilterDTO filter)
         {
-            DateTime from = new DateTime(2022, 5, 20);
-            DateTime to = new DateTime(2023, 10, 1);
+            DateTime from = filter.from;
+            DateTime to = filter.to;
             return _courseService.GetCourseFilteredByTime(from, to);
         }
     }
