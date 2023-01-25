@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using SchoolDatabase.Context;
 using SchoolDatabase.Middleware;
 using SchoolDatabase.Model.Entity.User;
+using SchoolDatabase.Options;
 using SchoolDatabase.Services;
 using SchoolDatabase.UnitOfWork;
 using System.Text;
@@ -82,13 +83,18 @@ builder.Services.AddSwaggerGen(c =>
 
 #endregion
 
-
 #region Db
+
+var dbContextOptions = new DbConnectionOption();
+builder.Services.Configure<DbConnectionOption>(
+    builder.Configuration.GetSection(DbConnectionOption.ConnectionStrings)
+);
+builder.Configuration.GetSection(DbConnectionOption.ConnectionStrings).Bind(dbContextOptions);
 
 //Add custom TrainCarAPIDbContext "service" to the container.
 builder.Services.AddDbContext<SchoolAPIDbContext>(options =>
 {
-    var dbBuilder = options.UseSqlServer(@"Server=(local);Database=SchoolDb;Trusted_Connection=True;MultipleActiveResultSets=true;");
+    var dbBuilder = options.UseSqlServer(dbContextOptions.SchoolDatabaseAPIDb);
     if (builder.Environment.IsDevelopment())
     {
         dbBuilder.EnableSensitiveDataLogging();

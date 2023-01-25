@@ -11,8 +11,8 @@ namespace SchoolDatabase.Attributes
         {
             if (value is string neptunCode)
             {
-                string pattern = @"^[a-zA-Z]1}[a-zA-Z0-9]{5}$";
-                var match = Regex.IsMatch(neptunCode, pattern, RegexOptions.IgnoreCase);
+                string pattern = @"^[a-zA-Z]{1}[a-zA-Z0-9]{5}$";
+                var match = Regex.IsMatch(neptunCode, pattern);
 
                 if(match)
                 {
