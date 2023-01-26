@@ -15,7 +15,7 @@ namespace SchoolDatabase.Model.Entity
         [Required, MaxLength(255)]
         public string Name { get; set; }
 
-        [Required, MaxLength(255)]
+        [Required, EmailAddress]
         public string Email { get; set; }
 
         public int PositionId { get; set; }

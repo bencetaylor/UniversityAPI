@@ -10,12 +10,13 @@ namespace SchoolDatabase.Model.Entity
     {
         [Required]
         [NeptunCodeValidationAttribute]
+        //[RegularExpression("^[a-zA-Z]{1}[a-zA-Z0-9]{5}$")]
         public string NeptunId { get; set; }
 
         [Required, MaxLength(255)]
         public string Name { get; set; }
 
-        [Required, MaxLength(255)]
+        [Required, EmailAddress]
         public string Email { get; set; }
 
         public int SpecialityId { get; set; }

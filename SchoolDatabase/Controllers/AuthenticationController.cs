@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using SchoolDatabase.Model.DTO;
 using SchoolDatabase.Model.Entity.User;
 using SchoolDatabase.Services.Interface;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -34,20 +35,7 @@ namespace SchoolDatabase.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDTO userForRegistration)
         {
-            if (_userManager.Users.Any(u => u.UserName == userForRegistration.Username || u.Email == userForRegistration.Email))
-            {
-                throw new ApplicationException("Username/Email already exists!");
-            }
-            var user = new ApplicationUser
-            {
-                UserName = userForRegistration.Username,
-                Name = userForRegistration.Name,
-                Email = userForRegistration.Email,
-                NeptunId = userForRegistration.NeptunId,
-                DateOfBirth = userForRegistration.DateOfBirth,
-                Department = userForRegistration.Department != null ? userForRegistration.Department : "ismeretlen"
-            };
-            var result = await _userManager.CreateAsync(user, userForRegistration.Password);
+            var result = await _userService.RegisterUser(userForRegistration);
 
             return result.Succeeded ? StatusCode(201) : throw new ApplicationException("Registration failed!");
         }
